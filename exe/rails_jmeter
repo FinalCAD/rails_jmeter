@@ -1,3 +1,12 @@
 #!/usr/bin/env ruby
 
 require "rails_jmeter"
+
+Dir[File.join('jmeter/**/*_jmeter.rb')].each { |path| load path }
+
+RailsJmeter.test_suite.run(
+  file: 'tmp/rails_jmeter.jmx',
+  log: 'tmp/rails_jmeter.log',
+  jtl: 'tmp/rails_jmeter.jtl',
+  gui: true
+)
