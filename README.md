@@ -51,7 +51,7 @@ end
 # end
 ```
 
-Run the `rails_jmeter` executable to open up the tests in `jmeter`. Will add more features later.
+Run the `rails_jmeter <OPTIONAL_FILE_PATH>` executable to open up the tests in `jmeter`. Will add more features later.
 
 ## License
 

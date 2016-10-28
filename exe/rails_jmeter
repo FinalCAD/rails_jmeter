@@ -2,7 +2,11 @@
 
 require "rails_jmeter"
 
-Dir[File.join('jmeter/**/*_jmeter.rb')].each { |path| load path }
+if ARGV.size == 0
+  Dir[File.join('jmeter/**/*_jmeter.rb')].each { |path| load path }
+else
+  load ARGV.first
+end
 
 RailsJmeter.test_suite.run(
   file: 'tmp/rails_jmeter.jmx',
