@@ -1,6 +1,11 @@
 require "rails_jmeter/version"
 
+require 'active_support/core_ext/hash'
+
 require 'rails_jmeter/test_suite'
+require 'rails_jmeter/ruby_jmeter/helpers'
+
+require 'rails_jmeter/ruby_jmeter/rails'
 
 module RailsJmeter
   class << self

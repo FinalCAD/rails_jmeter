@@ -34,7 +34,7 @@ module RailsJmeter
 
     def dsl(params={})
       return @dsl if @dsl
-      @dsl ||= RubyJmeter::ExtendedDSL.new(params)
+      @dsl ||= ::RubyJmeter::ExtendedDSL.new(params)
       setup
       return @dsl
     end

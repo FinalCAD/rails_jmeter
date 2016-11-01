@@ -27,9 +27,9 @@ describe RailsJmeter::TestSuite do
     subject { instance.base {|test_arg| } }
 
     it "sets the base proc" do
-      expect { subject }.to change { instance.base_proc.parameters }.
-        from([]).
-        to([[:opt, :test_arg]])
+      expect { subject }.to change { instance.base_proc.parameters }
+        .from([])
+        .to([[:opt, :test_arg]])
     end
   end
 
