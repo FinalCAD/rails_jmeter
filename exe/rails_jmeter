@@ -3,7 +3,7 @@
 require "rails_jmeter"
 
 if ARGV.size == 0
-  Dir[File.join('jmeter/**/*_jmeter.rb')].each { |path| load path }
+  RailsJmeter.load_jmeter_files
 else
   load ARGV.first
 end

@@ -4,6 +4,10 @@ require 'rails_jmeter/test_suite'
 
 module RailsJmeter
   class << self
+    def load_jmeter_files
+      Dir[File.join('jmeter/**/*_jmeter.rb')].each { |path| load path }
+    end
+
     def test_suite
       @test_suite ||= TestSuite.new
     end
