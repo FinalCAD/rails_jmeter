@@ -1,4 +1,4 @@
-# RailsJmeter
+# RailsJmeter [![Build Status](https://travis-ci.org/FinalCAD/rails_jmeter.svg?branch=master)](https://travis-ci.org/FinalCAD/rails_jmeter)
 
 Rails scaffolding for your [ruby-jmeter](https://github.com/flood-io/ruby-jmeter) tests---gem is in development.
 
