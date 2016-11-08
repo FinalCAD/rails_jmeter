@@ -27,12 +27,28 @@ describe RailsJmeter::Rails::Request do
       expect(instance.request_body_filter).to eql block
     end
 
+    it "sets the route_options" do
+      expect(instance.route_options).to eql route_options
+    end
+
     context "without block passed set" do
       let(:block) { nil }
 
       it "sets the #request_body_filter as the default filter" do
         expect(instance.request_body_filter).to eql default_filter
         expect(instance.request_body_filter.parameters).to eql [[:req, :the_test_filter]]
+      end
+    end
+
+    context "with default_route_options set" do
+      around do |example|
+        described_class.default_route_options = { some_option: true }
+        example.run
+        described_class.default_route_options = nil
+      end
+
+      it "sets merges the route option" do
+        expect(instance.route_options).to eql route_options.merge(some_option: true)
       end
     end
   end

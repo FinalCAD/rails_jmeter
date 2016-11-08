@@ -7,7 +7,7 @@ module RailsJmeter
       def initialize(method_name, route_name, route_options={}, &block)
         @method_name = method_name
         @route_name = route_name
-        @route_options = route_options
+        @route_options = route_options.reverse_merge(self.class.default_route_options)
         @request_body_filter = block || self.class.default_request_filter
       end
 
@@ -97,7 +97,7 @@ module RailsJmeter
       end
 
       class << self
-        attr_writer :default_request_filter, :default_response_filter
+        attr_writer :default_request_filter, :default_response_filter, :default_route_options
 
         def default_request_filter
           @default_request_filter || ->(hash) {}
@@ -105,6 +105,10 @@ module RailsJmeter
 
         def default_response_filter
           @default_response_filter || ->(hash) {}
+        end
+
+        def default_route_options
+          @default_route_options || {}
         end
       end
     end
