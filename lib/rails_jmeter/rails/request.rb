@@ -5,9 +5,9 @@ module RailsJmeter
       attr_accessor :context
 
       def initialize(method_name, route_name, route_options={}, &block)
-        @method_name = method_name
-        @route_name = route_name
-        @route_options = route_options.reverse_merge(self.class.default_route_options)
+        @method_name         = method_name
+        @route_name          = route_name
+        @route_options       = route_options.reverse_merge(self.class.default_route_options)
         @request_body_filter = block || self.class.default_request_filter
       end
 
@@ -70,7 +70,7 @@ module RailsJmeter
       TEST_FILE_SUFFIX = "_jmeter.rb".freeze
 
       def inferred_json(replace_jmeter_suffix)
-        call_stack = caller[1..15].find { |call_stack| call_stack.index TEST_FILE_SUFFIX }
+        call_stack = caller[1..15].find { |_call_stack| _call_stack.index TEST_FILE_SUFFIX }
         test_file_name = call_stack[0..call_stack.index(":") - 1]
                            .sub("jmeter/", "jmeter/requests/")
 

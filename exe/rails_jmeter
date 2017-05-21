@@ -10,7 +10,7 @@ end
 
 RailsJmeter.test_suite.run(
   file: 'tmp/rails_jmeter.jmx',
-  log: 'tmp/rails_jmeter.log',
-  jtl: 'tmp/rails_jmeter.jtl',
+  log:  'tmp/rails_jmeter.log',
+  jtl:  'tmp/rails_jmeter.jtl',
   gui: true
 )

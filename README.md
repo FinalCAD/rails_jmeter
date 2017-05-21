@@ -30,7 +30,7 @@ require ::File.expand_path('../../config/environment',  __FILE__)
 
 RailsJmeter.base do
   # base top-level code using ruby-jmeter syntax
-  
+
   view_results_tree # this line will slow large load tests, but it's here to show you what's happening
 end
 ```
@@ -46,7 +46,7 @@ end
 # which is the same as:
 RailsJmeter.embed do
   threads 1, loops: 1 do
-    get url: 'http://localhost:3000' 
+    get url: 'http://localhost:3000'
   end
 end
 ```
@@ -102,17 +102,17 @@ end
 ```
 
 For `PUT` and `POST` requests, you can specify the `raw_body` manually:
-                               
+
 ```ruby
 ruby_jmeter_options = { raw_body: { name: "my project name" }.to_json }
-``` 
+```
 
 A shorthand is specifying the request body in a `.json` file:
 ```json
 // in Rails.root/jmeter/requests/projects_controller/projects_POST_request.json
-{ "name": "my project name" } 
+{ "name": "my project name" }
 ```
- 
+
  You can filter the `.json` file request body by passing it to the `rails_request`:
 ```ruby
  rails_request = r(:get, :project, id: 1, format: :json) do |hash|
@@ -128,6 +128,8 @@ RailsJmeter::Rails::Request.default_request_filter = ->(hash) {  }
 ```
 
 ### r_request_and_assert
+
+#### testing value
 
 `r_request_and_assert` calls `r_request` and does assertions on the responses based on a `.json` file:
 ```json
@@ -147,6 +149,37 @@ r_request rails_request, ruby_jmeter_options do
 end
 ```
 
+#### testing regular expression
+
+`r_request_and_assert` calls `r_request` and does assertions on the responses based on a `.json` file:
+```json
+// in Rails.root/jmeter/requests/projects_controller/project_GET_response.json
+{ "uuid": "REGEXP: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})" }
+```
+
+```ruby
+r_request_and_assert rails_request, ruby_jmeter_options
+
+# is the same as:
+r_request rails_request, ruby_jmeter_options do
+  extract json: ".uuid", name: "([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"
+end
+```
+
+You can mix both in the same response assertions `.json` file:
+
+```json
+// in Rails.root/jmeter/requests/projects_controller/project_GET_response.json
+{
+  "uuid": "REGEXP: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})",
+  "here": ["with", "array"],
+  "again": "",
+  "with": [{"more": 10}]
+}
+```
+
+#### filtering response manually
+
 You can filter the `.json` file expected response manually:
 ```ruby
 r_request rails_request, ruby_jmeter_options do
@@ -157,6 +190,8 @@ r_request rails_request, ruby_jmeter_options do
 end
 ```
 
+#### default response filter
+
 You can also set a default filter via:
 ```ruby
 RailsJmeter::Rails::Request.default_response_filter = ->(hash) {  }
@@ -165,4 +200,3 @@ RailsJmeter::Rails::Request.default_response_filter = ->(hash) {  }
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
