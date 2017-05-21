@@ -3,6 +3,7 @@ require 'rails_jmeter/rails/request'
 module RailsJmeter
   module RubyJmeter
     module Rails
+
       def rails_request(*args, &block)
         request = RailsJmeter::Rails::Request.new(*args, &block)
         request.context = self
@@ -13,13 +14,16 @@ module RailsJmeter
       def r_request(request, ruby_jmeter_options={}, *args, &block)
         ruby_jmeter_options = ruby_jmeter_options.symbolize_keys
         ruby_jmeter_options = ruby_jmeter_options.reverse_merge!(name: request.name)
+
         ruby_jmeter_options.reverse_merge!(request.request_params(body: !ruby_jmeter_options[:raw_body]))
+
         public_send(request.method_name, ruby_jmeter_options, *args, &block)
       end
 
       def r_request_and_assert(request, *args, &block)
         r_request(request, *args) do
           instance_exec(&block) if block
+
           assert_response request.filtered_response, array_limit: 10 # set limit for lag reasons
         end
       end
@@ -37,7 +41,12 @@ module RailsJmeter
           end
         else
           item = item.nil? ? "null" : item
-          assert json: json_path, value: item, name: "#{json_path} == #{item.to_json}"
+
+          if item.to_s.match(/^REGEXP: /)
+            extract json: json_path, name: item.gsub('REGEXP: ','')
+          else
+            assert json: json_path, value: item, name: "#{json_path} == #{item.to_json}"
+          end
         end
       end
     end
