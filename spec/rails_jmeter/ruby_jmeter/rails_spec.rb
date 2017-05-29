@@ -79,16 +79,38 @@ describe RailsJmeter::RubyJmeter::Rails do
       subject
     end
 
+    # http://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor
+    # https://jmeter-plugins.org/wiki/JSONPathAssertion/
+    # https://github.com/json-path/JsonPath
     describe "#assert_response" do
-      let(:response_object) { { here: %w[with array], again: "", with: [{more: 10}] } }
+
       subject { instance.assert_response response_object }
 
-      it "calls the right assert" do
-        expect(instance).to receive(:assert).with(json: ".here[0]", value: "with", name: ".here[0] == \"with\"").ordered
-        expect(instance).to receive(:assert).with(json: ".here[1]", value: "array", name: ".here[1] == \"array\"").ordered
-        expect(instance).to receive(:assert).with(json: ".again", value: "", name: ".again == \"\"").ordered
-        expect(instance).to receive(:assert).with(json: ".with[0].more", value: 10, name: ".with[0].more == 10").ordered
-        subject
+      context 'value' do
+        let(:response_object) { { here: %w[with array], again: "", with: [{more: 10}] } }
+
+        it "calls the right assert" do
+          expect(instance).to receive(:assert).with(json: ".here[0]", value: "with", name: ".here[0] == \"with\"").ordered
+          expect(instance).to receive(:assert).with(json: ".here[1]", value: "array", name: ".here[1] == \"array\"").ordered
+          expect(instance).to receive(:assert).with(json: ".again", value: "", name: ".again == \"\"").ordered
+          expect(instance).to receive(:assert).with(json: ".with[0].more", value: 10, name: ".with[0].more == 10").ordered
+          subject
+        end
+      end
+
+      # http://jmeter.apache.org/usermanual/component_reference.html#Response_Assertion
+      context 'regexp' do
+        let(:response_object) { { uuid: "([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})" } }
+
+        it "calls the right assert" do
+          expect(instance).to receive(:assert).with({
+            json:  ".uuid",
+            value: "([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})",
+            name:  ".uuid == \"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\""
+          })
+
+          subject
+        end
       end
     end
   end
