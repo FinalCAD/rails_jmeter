@@ -7,3 +7,8 @@ rvm:
 matrix:
   allow_failures:
     - rvm: ruby-head
+deploy:
+  provider: script
+  script: sh bin/package_push.sh
+  on:
+    branch: use_gemfury
